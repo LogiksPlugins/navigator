@@ -1,4 +1,4 @@
-navigator
+Navigator
 =========
 
-A module for Logiks Framework.
+Menu generator library and module
