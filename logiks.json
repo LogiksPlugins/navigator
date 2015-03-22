@@ -1,0 +1,33 @@
+{
+    "name": "navigator",
+    "version": "1.0.0",
+    "package":"navigator",
+    "type": "module",
+    "app": "*",
+    "privilege": "*",
+    "description": "Navigator module for generating menus and sidebars using standard links table",
+    "keywords": "logiks,modules,navigator",
+    "license": "MIT",
+    "marketid": "",
+    "homepage": "https://github.com/LogiksPlugins/navigator",
+    "bugs": "https://github.com/LogiksPlugins/navigator/issues",
+    "private": false,
+    "permissions": "",
+    "dependencies": {
+        "core": "*"
+    },
+    "directoryMap": {
+        "installer": ".install"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/LogiksPlugins/navigator.git"
+    },
+    "authors": [
+        {
+            "name": "OpenLogiks Team",
+            "email": "admin@openlogiks.org",
+            "authorid":"olgksadmin"
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+CREATE TABLE `#DB_APPS#_links` (
+   `id` int(10) unsigned not null auto_increment,
+   `menuid` varchar(255) not null,
+   `title` varchar(255) not null,
+   `category` varchar(255),
+   `menugroup` varchar(255),
+   `class` varchar(255),
+   `link` varchar(255) default '#',
+   `iconpath` varchar(255),
+   `tips` varchar(255),
+   `site` varchar(255) default '*',
+   `privilege` varchar(500) default '*',
+   `blocked` enum('true','false') default 'false',
+   `onmenu` enum('true','false') default 'true',
+   `target` varchar(55),
+   `device` varchar(20) default '*',
+   `to_check` varchar(200),
+   `weight` int(11) default '0',
+   `userid` varchar(155) not null,
+   `dtoc` datetime not null,
+   `dtoe` datetime not null,
+   PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

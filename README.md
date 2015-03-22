@@ -1,4 +1,4 @@
 Navigator
 =========
 
-Menu generator library and module
+Navigator module for generating menus and sidebars using standard links table
