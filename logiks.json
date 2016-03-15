@@ -1,8 +1,8 @@
 {
     "name": "navigator",
     "version": "2.0.0",
-    "package":"navigator",
     "type": "module",
+    "package":"olgks.navigator",
     "app": "*",
     "privilege": "*",
     "description": "Navigator module for generating menus and sidebars using standard links table",
