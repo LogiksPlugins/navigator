@@ -16,5 +16,17 @@ if(!function_exists("generateNavigationFromDB")) {
 		$mg=new MenuGenerator("Masters",['core',$dbKey]);
 		return $mg->processMenuArray($mg->processMenuDir($dirPath));
 	}
+	function preprocessMenuTree($menuTree) {
+		$keys=array_keys($menuTree);
+		foreach($keys as $k) {
+			foreach($menuTree[$k] as $a=>$menu) {
+				if($menu['category']!=null && strlen($menu['category'])>0) {
+					$menuTree[$menu['category']][$a]=$menu;
+					unset($menuTree[$k][$a]);
+				}
+			}
+		}
+		return $menuTree;
+	}
 }
 ?>

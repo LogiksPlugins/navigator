@@ -53,7 +53,8 @@ class MenuGenerator {
 		$dbTable=_dbTable($dbTable, $dbKey);
 
 		$site=SITENAME;
-		$pid=getMyRoleHash();
+		$pid=$_SESSION['SESS_PRIVILEGE_NAME'];
+		$phash=getMyRoleHash();
 		$cols=_db($dbKey)->get_columnList($dbTable);
 
 		$sql=_db($dbKey)->_selectQ($dbTable,"*",[
@@ -61,22 +62,22 @@ class MenuGenerator {
 					"onmenu"=>"true",
 					"menuid"=>$navKey
 				]);
-		$sql->_where("(site='$site' OR site='*')");
+		$sql->_whereIN("site",[$site,'*']);//"(site='$site' OR site='*')"
 		
 		if(isset($_COOKIE['USER_DEVICE']) && in_array("device", $cols)) {
-			$sql->_where("(device='*' OR FIND_IN_SET('{$_COOKIE['USER_DEVICE']}',device))");
+			$sql->_whereIN("device",['*',$_COOKIE['USER_DEVICE']]);
+			//$sql->_whereOR("device",['*',["OP"=>":FIND:","VALUE"=>$_COOKIE['USER_DEVICE']]]);
+			//"(device='*' OR FIND_IN_SET('{$_COOKIE['USER_DEVICE']}',device))"
 		}
-
+		
 		if(_session("SESS_PRIVILEGE_ID")!=1) {
-
+			$sql->_whereRAW("(find_in_set('$pid',privilege) OR find_in_set('$phash',privilege) OR privilege='*')");
 		}
-		$sql->_where("(find_in_set('$pid',privilege) OR privilege='*')");
 
 		if(in_array("weight", $cols)) {
 			$sql->_orderby("weight ASC");
 		}
-		
-		//echo $sql->_SQL();
+		//exit($sql->_SQL());
 		$data=$sql->_get();
 
 		return $data;
@@ -91,6 +92,7 @@ class MenuGenerator {
 
 		$fData=[];
 		foreach ($fs as $f) {
+			if(strtolower(substr($f,strlen($f)-5))!=".json") continue;
 			if(is_dir($dirPath.$f)) {
 				$data=$this->processMenuDir($dirPath.$f."/",$f);
 				foreach ($data as $key => $subMenu) {
@@ -99,7 +101,7 @@ class MenuGenerator {
 			} else {
 				$data=json_decode(file_get_contents($dirPath.$f),true);
 				$data['id']=md5($dirPath.$f);
-				$data['menugroup']=$menugroup;
+				if(!isset($data['menugroup'])) $data['menugroup']=$menugroup;
 				$fData[]=array_merge($this->defaultData,$data);
 			}
 		}
@@ -107,6 +109,7 @@ class MenuGenerator {
 	}
 
 	public function processMenuRules($data) {
+		if(!is_array($data) || empty($data)) return [];
 		//"module","dbtable",(TODO "page","dbcolumn")
 		foreach ($data as $key => $menuData) {
 			if(isset($menuData['rules'])) {
@@ -117,6 +120,16 @@ class MenuGenerator {
 						switch ($ar[0]) {
 							case 'module':
 								if(!checkModule($ar[1])) {
+									unset($data[$key]);
+									break;
+								}
+								if(!checkUserScope($ar[1])) {
+									unset($data[$key]);
+									break;
+								}
+								break;
+							case 'scope':
+								if(!checkUserScope($ar[1])) {
 									unset($data[$key]);
 									break;
 								}
@@ -138,15 +151,17 @@ class MenuGenerator {
 	}
 
 	public function processMenuArray($data) {
+		if(!is_array($data) || empty($data)) return [];
 		//printArray($data);exit();
 
 		$data=$this->processMenuRules($data);
-
+		//printArray($data);exit();
+		
 		$menuList=[];
 		$fData=[];
 		foreach ($data as $id => $item) {
 			$menuList[$item['id']]=$item;
-			if($item['menugroup']=="/") {
+			if($item['menugroup']=="/" || strlen($item['menugroup'])==0) {
 				if(!isset($fData[$item['title']])) {
 					$fData[$item['title']]=[];
 				}
