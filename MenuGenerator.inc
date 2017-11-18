@@ -112,6 +112,9 @@ class MenuGenerator {
 		if(!is_array($data) || empty($data)) return [];
 		//"module","dbtable",(TODO "page","dbcolumn")
 		foreach ($data as $key => $menuData) {
+			if(!isset($menuData['rules']) && isset($menuData['to_check'])) {
+				$menuData['rules']=$menuData['to_check'];
+			}
 			if(isset($menuData['rules'])) {
 				$flds=explode(",",$menuData['rules']);
 				foreach($flds as $toCheck) {
@@ -128,10 +131,18 @@ class MenuGenerator {
 									break;
 								}
 								break;
-							case 'scope':
-								if(!checkUserScope($ar[1])) {
-									unset($data[$key]);
-									break;
+							case 'scope':case 'policy':
+								$arr=explode(".",$ar[1]);
+								if(count($arr)>=2) {
+									if(!checkUserRoles($arr[0],$ar[1])) {
+										unset($data[$key]);
+										break;
+									}
+								} else {
+									if(!checkUserScope($ar[1])) {
+										unset($data[$key]);
+										break;
+									}
 								}
 								break;
 							case 'dbtable':
@@ -140,7 +151,6 @@ class MenuGenerator {
 									break;
 								}
 								break;
-
 						}
 					}
 				}
