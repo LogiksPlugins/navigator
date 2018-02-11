@@ -8,7 +8,7 @@
 if(!defined('ROOT')) exit('No direct script access allowed');
 
 class MenuGenerator {
-	
+
 	private $dataSources=[];
 	private $defaultData=[
 				"id"=>"",
@@ -63,13 +63,13 @@ class MenuGenerator {
 					"menuid"=>$navKey
 				]);
 		$sql->_whereIN("site",[$site,'*']);//"(site='$site' OR site='*')"
-		
+
 		if(isset($_COOKIE['USER_DEVICE']) && in_array("device", $cols)) {
 			$sql->_whereIN("device",['*',$_COOKIE['USER_DEVICE']]);
 			//$sql->_whereOR("device",['*',["OP"=>":FIND:","VALUE"=>$_COOKIE['USER_DEVICE']]]);
 			//"(device='*' OR FIND_IN_SET('{$_COOKIE['USER_DEVICE']}',device))"
 		}
-		
+
 		if(_session("SESS_PRIVILEGE_ID")!=1) {
 			$sql->_whereRAW("(find_in_set('$pid',privilege) OR find_in_set('$phash',privilege) OR privilege='*')");
 		}
@@ -131,7 +131,7 @@ class MenuGenerator {
 									break;
 								}
 								break;
-							case 'scope':case 'policy':
+							case 'scope':case 'policy':case 'privileges':case 'users':
 								$arr=explode(".",$ar[1]);
 								if(count($arr)>=2) {
 									if(!checkUserRoles($arr[0],$ar[1])) {
@@ -166,7 +166,7 @@ class MenuGenerator {
 
 		$data=$this->processMenuRules($data);
 		//printArray($data);exit();
-		
+
 		$menuList=[];
 		$fData=[];
 		foreach ($data as $id => $item) {
@@ -177,7 +177,7 @@ class MenuGenerator {
 				}
 			}
 		}
-		
+
 		foreach ($menuList as $id => $item) {
 			$group=$item['menugroup'];
 			if(is_numeric($group)) {
