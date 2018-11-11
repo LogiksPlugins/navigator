@@ -60,8 +60,9 @@ class MenuGenerator {
 		$sql=_db($dbKey)->_selectQ($dbTable,"*",[
 					"blocked"=>"false",
 					"onmenu"=>"true",
-					"menuid"=>$navKey
+// 					"menuid"=>$navKey
 				]);
+    $sql->_whereIN("menuid",$navKey);
 		$sql->_whereIN("site",[$site,'*']);//"(site='$site' OR site='*')"
 
 		if(isset($_COOKIE['USER_DEVICE']) && in_array("device", $cols)) {
