@@ -62,7 +62,7 @@ class MenuGenerator {
 					"onmenu"=>"true",
 // 					"menuid"=>$navKey
 				]);
-    $sql->_whereIN("menuid",$navKey);
+    	$sql->_whereIN("menuid",$navKey);
 		$sql->_whereIN("site",[$site,'*']);//"(site='$site' OR site='*')"
 
 		if(isset($_COOKIE['USER_DEVICE']) && in_array("device", $cols)) {
