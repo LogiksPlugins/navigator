@@ -106,6 +106,9 @@ class MenuGenerator {
 				$fData[]=array_merge($this->defaultData,$data);
 			}
 		}
+		foreach ($fData as $key => $menu) {
+			if($menu['blocked']===true || $menu['blocked']=="true") unset($fData[$key]);
+		}
 		return $fData;
 	}
 
