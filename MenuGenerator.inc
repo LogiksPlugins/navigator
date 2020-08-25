@@ -137,7 +137,12 @@ class MenuGenerator {
 								break;
 							case 'scope':case 'policy':case 'privileges':case 'users':
 								$arr=explode(".",$ar[1]);
-								if(count($arr)>=2) {
+								if(count($arr)>=3) {
+									if(!checkUserRoles($arr[0],$ar[1],$ar[2])) {
+										unset($data[$key]);
+										break;
+									}
+								} elseif(count($arr)>=2) {
 									if(!checkUserRoles($arr[0],$ar[1])) {
 										unset($data[$key]);
 										break;
