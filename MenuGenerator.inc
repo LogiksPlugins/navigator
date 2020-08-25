@@ -148,7 +148,8 @@ class MenuGenerator {
 										break;
 									}
 								} else {
-									if(!checkUserScope($ar[1])) {
+									//if(!checkUserScope($ar[1])) {
+									if(!checkUserRoles($arr[0], "main")) {
 										unset($data[$key]);
 										break;
 									}
