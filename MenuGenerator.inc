@@ -72,7 +72,7 @@ class MenuGenerator {
 		}
 
 		if(_session("SESS_PRIVILEGE_ID")!=1) {
-			$sql->_whereRAW("(find_in_set('$pid',privilege) OR find_in_set('$phash',privilege) OR privilege='*' OR privilege LIKE 'policy#%' OR privilege LIKE 'scope#%')");
+			$sql->_whereRAW("(find_in_set('$pid',privilege) OR find_in_set('$phash',privilege) OR privilege='*')");
 		}
 
 		if(in_array("weight", $cols)) {
