@@ -120,6 +120,7 @@ class MenuGenerator {
 				$menuData['rules']=$menuData['to_check'];
 			}
 			if(isset($menuData['rules'])) {
+				_log($menuData['rules'], "console");
 				$flds=explode(",",$menuData['rules']);
 				foreach($flds as $toCheck) {
 					$ar=explode("#",$toCheck);
@@ -135,7 +136,13 @@ class MenuGenerator {
 									break;
 								}
 								break;
-							case 'scope':case 'policy':case 'privileges':case 'users':
+							case "policy":
+								if(!checkUserPolicy($ar[1])) {
+									unset($data[$key]);
+									break;
+								}
+								break;
+							case 'scope':case 'privileges':case 'users':
 								$arr=explode(".",$ar[1]);
 								if(count($arr)>=3) {
 									if(!checkUserRoles($arr[0],$arr[1],$arr[2])) {
