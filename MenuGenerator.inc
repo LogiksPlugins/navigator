@@ -120,7 +120,6 @@ class MenuGenerator {
 				$menuData['rules']=$menuData['to_check'];
 			}
 			if(isset($menuData['rules'])) {
-				_log($menuData['rules'], "console");
 				$flds=explode(",",$menuData['rules']);
 				foreach($flds as $toCheck) {
 					$ar=explode("#",$toCheck);
