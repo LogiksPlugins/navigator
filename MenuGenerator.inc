@@ -106,8 +106,25 @@ class MenuGenerator {
 				$fData[]=array_merge($this->defaultData,$data);
 			}
 		}
+		
+		$pid=$_SESSION['SESS_PRIVILEGE_NAME'];
+		$phash=getMyRoleHash();
 		foreach ($fData as $key => $menu) {
 			if($menu['blocked']===true || $menu['blocked']=="true") unset($fData[$key]);
+			//Check if Device is Allowed
+			if(isset($menu['device']) && $menu['device']!="*" && $menu['device']!="") {
+				$temp = explode(",", $menu['device']);
+				if(!in_array($_COOKIE['USER_DEVICE'], $temp)) {
+					unset($fData[$key]);
+				}
+			}
+			//Check if privilege is Allowed
+			if(isset($menu['privilege']) && $menu['privilege']!="*" && $menu['privilege']!="") {
+				$temp = explode(",", $menu['privilege']);
+				if(!in_array($pid, $temp) && !in_array($phash, $temp)) {
+					unset($fData[$key]);
+				}
+			}
 		}
 		return $fData;
 	}
