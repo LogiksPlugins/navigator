@@ -184,6 +184,14 @@ class MenuGenerator {
 									break;
 								}
 								break;
+							case 'method':
+								if(function_exists($ar[1])) {
+									if(!call_user_func($ar[1], $menuData)) {
+										unset($data[$key]);
+										break;
+									}
+								}
+								break;
 						}
 					}
 				}
