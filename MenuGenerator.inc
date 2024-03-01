@@ -208,6 +208,14 @@ class MenuGenerator {
 		$data=$this->processMenuRules($data);
 		//printArray($data);exit();
 
+		usort($data, function ($item1, $item2) {
+			if(!isset($item1['weight'])) $item1['weight'] = 0;
+			if(!isset($item2['weight'])) $item2['weight'] = 0;
+
+		    return $item1['weight'] <=> $item2['weight'];
+		});
+		// printArray($data);exit();
+
 		$menuList=[];
 		$fData=[];
 		foreach ($data as $id => $item) {
