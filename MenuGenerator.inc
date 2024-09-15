@@ -40,6 +40,7 @@ class MenuGenerator {
 
 		$ds=[];
 		foreach ($this->dataSources as $key) {
+			if(gettype(_db($key))==="boolean") continue;
 			$tbls=_db($key)->get_tableList();
 			foreach ($tbls as $a=>$b) {
 				$ds[$b]=$key;
