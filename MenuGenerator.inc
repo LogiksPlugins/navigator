@@ -94,13 +94,14 @@ class MenuGenerator {
 
 		$fData=[];
 		foreach ($fs as $f) {
-			if(strtolower(substr($f,strlen($f)-5))!=".json") continue;
 			if(is_dir($dirPath.$f)) {
 				$data=$this->processMenuDir($dirPath.$f."/",$f);
 				foreach ($data as $key => $subMenu) {
 					$fData[]=$subMenu;
 				}
 			} else {
+				if(strtolower(substr($f,strlen($f)-5))!=".json") continue;
+
 				$data=json_decode(file_get_contents($dirPath.$f),true);
 				$data['id']=md5($dirPath.$f);
 				if(!isset($data['menugroup'])) $data['menugroup']=$menugroup;
